@@ -2,12 +2,12 @@
 ssh bandit0@bandit.labs.overthewire.org -p 2220
 
 *Level 1*
-used cat readme to veiw readme file
+cat readme to veiw readme file
 
 Password : boJ9jbbUNNfktd78OOpsqOltutMc3MY1
 
 *Level 2*
-used cat< - to view dashed file
+cat< - to view dashed file
 
 Password : CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
 
@@ -26,7 +26,7 @@ cat .hidden
 Password : pIwrPrtPN36QITSp3EQaw936yaFoFgAB
 
 *Level 5*
-used  file inhere/* to get the type of each file.*
+file inhere/* to get the type of each file.*
 inhere/-file00: data
 inhere/-file01: data
 inhere/-file02: data
@@ -54,7 +54,7 @@ then i extract the password using cat /var/lib/dpkg/info/bandit7.password
 Password: HKBPTKQnIay4Fw76bEy8PVxKEDQRKTzs
 
 *Level 8*
-used grep "millionth" data.txt
+grep "millionth" data.txt
 output was : millionth       cvX2JJa4CFALtqS87jk27qwqGhBM9plV
 
 *level 9*
@@ -65,15 +65,20 @@ the sort command sort the txt file so that same strings are adjacent to each oth
 -u prints the unique line
 
 *Level 10*
-used strings data.txt | grep -F "=" 
+strings data.txt | grep -F "=" 
 the string command prints the human readable text and grep -F search for the patter as fixed strings.
 
 Password: truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk
 
 *Level 11*
-used base64 data.txt -d
+base64 data.txt -d
 The password is IFukwKGsFW8MOq3IRFqrxE1hxTNEbUPR
 base64 command use to encode and decode the data from base64 file.
 -d use to decode the text in ASCII
 -e encode it.
 
+*Level 12*
+cat data.txt
+cat data.txt | tr 'a-zA-Z' 'n-za-mN-ZA-M'
+
+*Level 13*
