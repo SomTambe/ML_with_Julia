@@ -1,0 +1,92 @@
+# L:0->1
+cat readme
+#password:boJ9jbbUNNfktd78OOpsqOltutMc3MY1
+# l:1->2
+ls -a
+#password:CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
+#L:2->3
+cat spaces\ in\ this\ filename
+#password:UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
+#L:3->4
+ls -a
+cd inhere
+ls -a 
+cat .hidden
+#password:pIwrPrtPN36QITSp3EQaw936yaFoFgAB
+#L:4->5
+ls -a
+cd inhere
+ls -a
+find . -type f | xargs file
+./-file07: ASCII text
+cat ./-file07
+#password:koReBOKuIDDepwhWk7jZC0RTdopnAYKh
+#L:5->6
+ls
+cd inhere
+ls -1
+find . -type f -size 1033c ! -executable
+cat ./maybehere07/.file2
+#password:DXjZPULLxYr17uwoI01bNLQbtFemEgo7
+#L:6->7
+find / -type f -user bandit7 -group bandit6 -size 33c
+cat /var/lib/dpkg/info/bandit7.password
+#password: HKBPTKQnIay4Fw76bEy8PVxKEDQRKTzs
+#L:7->8
+ls 
+strings data.txt | grep millionth
+#password:cvX2JJa4CFALtqS87jk27qwqGhBM9plV
+#L:8->9
+ls 
+cat data.txt
+sort data.txt | uniq -c # gives the count of repetition 
+#password: UsvVyFSfZZWbi6wgC7dAFyFuR6jQQUhR
+#L:9->10
+ls
+strings data.txt | grep "="
+#password: truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk
+#L:10->11
+ls
+cat data.txt
+base64 -d data.txt
+#password: IFukwKGsFW8MOq3IRFqrxE1hxTNEbUPR
+#L:11->12
+la
+cat data.txt
+echo "Gur cnffjbeq vf 5Gr8L4qetPEsPk8htqjhRK8XSP6x2RHh" | tr 'n-za-mN-ZA-M' 'a-zA-Z'
+# password: 5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu
+#L:12->13
+ls
+cat data.txt
+cd /tmp/harsit123
+ls
+file data.txt
+zcat data.txt > hello
+file hello
+bzip2 -d hello
+file hello.out
+zcat hello.out > hello1
+file hello1
+tar -xvf hello1
+file data5.bin
+tar -xvf data5.bin
+file data6.bin
+bzip2 -d data6.bin
+file data.bin.out
+file data6.bin.out
+tar -xvf data6.bin.out
+file data8.bin
+zcat data8.bin > hello3
+cat hello3
+#password:8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
+#L:13->14
+ssh -i sshkey.private bandit14@localhost
+#password:4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e
+#L:14->15
+nc local host 30000
+4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e
+#password: BfMYroe26WYalil77FoDi9qh59eK5xNr
+#L:15->16
+ncat --ssl localhost 30001
+BfMYroe26WYalil77FoDi9qh59eK5xNr
+#password:cluFn7wTiGryunymYOu4RcffSxQluehd
