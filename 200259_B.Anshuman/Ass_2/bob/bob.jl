@@ -1,18 +1,35 @@
+# submit
 function bob(stimulus)
-    for ch in stimulus
-        if ch == '?'
-            if uppercase(stimulus) == stimulus
-                return "Calm down, I know what I'm doing!"
+    sent = strip(stimulus)
+    ans = "Whatever."
+
+    if length(sent) == 0
+        ans = "Fine. Be that way!"
+    elseif endswith(sent, '?')
+        if isupper(sent)
+            ans = "Calm down, I know what I'm doing!"
+        else
+            ans = "Sure."
+        end
+    elseif isupper(sent)
+        ans = "Whoa, chill out!"
+    end
+
+    return ans
+
+end
+
+function isupper(sent)
+    res = false
+    for c ∈ sent
+        if isletter(c)
+            if isuppercase(c)
+                res = true
             else
-                return "Sure."
+                res = false
+                break
             end
         end
     end
-    if length(strip(stimulus)) == 0
-        return "Fine. Be that way!"
-    elseif uppercase(stimulus) == stimulus
-        return "Whoa, chill out!"
-    else
-        return "Whatever."
-    end
+    return res
 end
