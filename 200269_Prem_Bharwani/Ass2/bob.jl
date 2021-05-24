@@ -1,22 +1,22 @@
-function bob(stimulus)
+function bob(stimulus2)
+    stimulus=strip(stimulus2)
     len=length(stimulus)
     yell=false
     ques=false
     has_letters=false
-    check_empty=true
+    check_empty=isempty(stimulus)
+    ques=endswith(stimulus,'?')
+    println("is empty = $check_empty")
     if uppercase(stimulus)==stimulus
         yell=true
     end
     for c in stimulus
-        # println(c)
-        if c!=' '
-            check_empty=false
-        end
+        # # println(c)
+        # if c!=' '
+        #     check_empty=false
+        # end
         if c>='A' && c<='Z' || c>='a' && c<='z'
             has_letters=true
-        end
-        if c=='?'
-            ques=true;break;
         end
     end
 
@@ -29,7 +29,7 @@ function bob(stimulus)
     else
         if yell && has_letters
             return("Whoa, chill out!")
-        elseif yell && check_empty
+        elseif check_empty
             return("Fine. Be that way!")
         else
             return("Whatever.")
@@ -38,4 +38,4 @@ function bob(stimulus)
 
 end
 
-# println(bob("        "))
+println(bob("\t\t\t\t\t\t\t\t\t\t"))
