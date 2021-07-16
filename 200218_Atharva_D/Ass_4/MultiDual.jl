@@ -27,7 +27,7 @@ end
 # ╔═╡ ce4b4458-ee96-4488-a42d-45bd6846e392
 # Defining the MultiDual
 
-struct MultiDual{N,T} # N -> Size of the vector, T -> DataType of the vector
+struct MultiDual{N,T} <: Number # N -> Size of the vector, T -> DataType of the vector
     val::T
     derivs::SVector{N,T}
 end
@@ -57,27 +57,6 @@ begin
 	
 end
 
-# ╔═╡ 6915c22c-933a-4e89-9219-0c296676b392
-begin
-	a1 = MultiDual(3.0, SVector(1.0,0))
-	a2 = MultiDual(2.0, SVector(0,1.0))
-	a1/a2
-end
-
-# ╔═╡ 5b1b473c-ac9f-4f30-b0ff-f4d625957266
-# Example for exponential
-begin
-	b1 = MultiDual(5.0, SVector(1.0,0))
-	b1^3.4
-end
-
-# ╔═╡ b8f91ff4-bf75-4d2e-9770-c7e441a49363
-# Trigonometry example
-begin
-	c1 = MultiDual(1.0, SVector(1.0,0))
-	cos(c1)
-end
-
 # ╔═╡ 4a867236-4947-415d-96f9-faabbbc43a0e
 md"""
 ## Extending MultiDual{T,N} framework:
@@ -95,7 +74,7 @@ We want to extend it such that it has functions for-
 # ╔═╡ 08e81bad-231a-4ec7-bc6c-1fd4110753e0
 begin
 	
-# 	Basic Operators first:
+# 	Basic Operators like +, -, *, /, ^ first:
 	
 	
 	function Base.:+(f::MultiDual{N,T}, g::MultiDual{N,T}) where {N,T}
@@ -110,19 +89,21 @@ begin
     	return MultiDual{N,T}(f.val * g.val, f.val .* g.derivs + g.val .* f.derivs)
 	end
 	
-	############################################
-	
 	function Base.:*(f::MultiDual{N,T}, α::Number) where {N,T}
     	return MultiDual{N,T}(f.val * α, f.derivs .* α)
 	end
 
 	Base.:*(α::Number, f::MultiDual{N, T}) where {N, T} = f*α
 	
-	############################################
+	function Base.:/(f::MultiDual{N,T}, g::MultiDual{N,T}) where {N,T}
+    	return MultiDual{N,T}(f.val/g.val, (f.derivs*g.val - f.val*g.derivs)/(g.val^2))
+	end
 	
 	function Base.:^(f::MultiDual{N,T}, g::Number) where {N,T}
         return MultiDual{N,T}(f.val ^ g, (g*((f.val)^(g-one(g)))*(f.derivs)))
     end
+	
+# 	Functions like sin, cos, exp, log, abs
 	
 	function Base.:sin(f::MultiDual{N,T}) where {N,T}
         return MultiDual{N,T}(sin(f.val), cos(f.val)*f.derivs)
@@ -131,10 +112,6 @@ begin
 	function Base.:cos(f::MultiDual{N,T}) where {N,T}
         return MultiDual{N,T}(cos(f.val), -1*sin(f.val)*f.derivs)
     end
-	
-	function Base.:/(f::MultiDual{N,T}, g::MultiDual{N,T}) where {N,T}
-    	return MultiDual{N,T}(f.val/g.val, (f.derivs*g.val - f.val*g.derivs)/(g.val^2))
-	end
 	
 	function Base.:exp(f::MultiDual{N,T}) where {N,T}
         return MultiDual{N,T}(exp(f.val), exp(f.val)*f.derivs)
@@ -148,6 +125,27 @@ begin
 		return MultiDual{N,T}(abs(f.val), sign(f.val)*f.derivs)
 	end
 
+end
+
+# ╔═╡ 51423d34-9162-4f60-9f83-729e592aebbf
+begin
+	a1 = MultiDual(3.0, SVector(1.0,0))
+	a2 = MultiDual(2.0, SVector(0,1.0))
+	a1/a2
+end
+
+# ╔═╡ ab31fd43-a637-48b7-b364-b104e5b3e415
+# Example for exponential
+begin
+	b1 = MultiDual(5.0, SVector(1.0,0))
+	b1^3.4
+end
+
+# ╔═╡ 929e63ad-2f60-4766-a6f2-454f315b3dd3
+# Trigonometry example
+begin
+	c1 = MultiDual(1.0, SVector(1.0,0))
+	cos(c1)
 end
 
 # ╔═╡ 89ba279b-3d1a-411b-8f08-f52567929591
@@ -175,11 +173,11 @@ md"""
 
 # ╔═╡ d3414ed4-cf55-4200-8bd1-a2a48713e7c9
 begin
-        function Base.:>(f::MultiDual{N,T}, α::Number) where {N,T}
+        function Base.:(>)(f::MultiDual{N,T}, α::Number) where {N,T}
             return f.val>α ? true : false
         end
 	
-		function Base.:<(f::MultiDual{N,T}, α::Number) where {N,T}
+		function Base.:(<)(f::MultiDual{N,T}, α::Number) where {N,T}
             return f.val<α ? true : false
         end
 	
@@ -187,11 +185,11 @@ begin
             return f.val==α ? true : false
         end
 	
-        function Base.:>(f::MultiDual{N,T}, g::MultiDual{N,T}) where {N,T}
+        function Base.:(>)(f::MultiDual{N,T}, g::MultiDual{N,T}) where {N,T}
             return f.val>g.val ? true : false
         end
 	
-        function Base.:<(f::MultiDual{N,T}, g::MultiDual{N,T}) where {N,T}
+        function Base.:(<)(f::MultiDual{N,T}, g::MultiDual{N,T}) where {N,T}
             return f.val<g.val ? true : false
         end
 	
@@ -211,21 +209,36 @@ Create a wrapper for Gradient in MultiDual. We had earlier made a derivative wra
 # What we did in Dual
 derivative(f, x) = f(Dual(x, one(x))).der # Here, we do one(x) since d/dx(x) = 1 
 
-# ╔═╡ 3c7477ff-12ae-4313-bb61-5cc5988c15fa
-begin 
-	g(x) = 3x^2
-	derivative(g,2)
-end
-
 # ╔═╡ b319d5b6-df44-4f57-a362-35e5007d3a7c
-# Gradient Wrapper for MultiDual
-gradient(f,x,y)= f(MultiDual(x,SVector(one(x),0)),MultiDual(y,SVector(0,one(y)))).derivs
+# Gradient wrapper
+
+gradient(f::MultiDual{N,T}) where {N,T} = f.derivs
 
 # ╔═╡ 27791a17-e602-4c90-bccc-5577aa98b155
 # Example
 begin
-	func(x,y)= 4x^2 + 2y
-	gradient(func,10,2)
+	f = MultiDual(3, SVector(2,3))
+	gradient(f)
+end
+
+# ╔═╡ e6d56f5d-95c6-482a-bdbb-a3b1bfb49838
+md"""
+## Conversion and Promotion
+
+To simplify the computations for **`+(::MultiDual, ::Real)`** and **`+(::Real, ::MultiDual)`** by defining a single method that can work for both
+"""
+
+# ╔═╡ 6b9134ea-5711-47a5-b2c5-fc1c723dedd2
+import Base: convert, promote_rule
+
+# ╔═╡ ebd61053-528f-4d7b-8567-ca6e79babf40
+function Base.:convert(::Type{MultiDual{N,T}},α::T) where {N,T<:Number}
+    	return MultiDual{N,T}(α,SVector{N,T}(zeros(N)))
+end
+
+# ╔═╡ 5afd58ec-8d6b-4020-9392-f0e1fd490348
+function Base.:promote_rule(::Type{MultiDual{N,T}},::Type{T}) where {N,T}
+    	return MultiDual{N,T}
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -1312,19 +1325,22 @@ version = "0.9.1+5"
 # ╠═6468d98d-ee72-4079-8ee8-33c0b71f77aa
 # ╠═ce4b4458-ee96-4488-a42d-45bd6846e392
 # ╠═cfa93a5d-e71a-4d90-9f75-b24e93d1509e
-# ╠═6915c22c-933a-4e89-9219-0c296676b392
-# ╠═5b1b473c-ac9f-4f30-b0ff-f4d625957266
-# ╠═b8f91ff4-bf75-4d2e-9770-c7e441a49363
 # ╟─4a867236-4947-415d-96f9-faabbbc43a0e
 # ╠═08e81bad-231a-4ec7-bc6c-1fd4110753e0
+# ╠═51423d34-9162-4f60-9f83-729e592aebbf
+# ╠═ab31fd43-a637-48b7-b364-b104e5b3e415
+# ╠═929e63ad-2f60-4766-a6f2-454f315b3dd3
 # ╟─89ba279b-3d1a-411b-8f08-f52567929591
 # ╠═636f97fa-0748-41cf-9ec5-9a23a7172f1f
 # ╟─69cbf3b7-5179-4806-b5a2-4004ad2dd2c7
 # ╠═d3414ed4-cf55-4200-8bd1-a2a48713e7c9
 # ╟─41c7603e-aede-4c9b-953e-e8026493b2a3
 # ╠═a9a614e7-7bba-438b-97f0-53d355e04c6d
-# ╠═3c7477ff-12ae-4313-bb61-5cc5988c15fa
 # ╠═b319d5b6-df44-4f57-a362-35e5007d3a7c
 # ╠═27791a17-e602-4c90-bccc-5577aa98b155
+# ╟─e6d56f5d-95c6-482a-bdbb-a3b1bfb49838
+# ╠═6b9134ea-5711-47a5-b2c5-fc1c723dedd2
+# ╠═ebd61053-528f-4d7b-8567-ca6e79babf40
+# ╠═5afd58ec-8d6b-4020-9392-f0e1fd490348
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
