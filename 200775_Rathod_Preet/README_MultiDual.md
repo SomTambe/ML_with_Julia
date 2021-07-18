@@ -1,0 +1,1 @@
+I read the doc provided, and learnt about promotion_rule() and convert() as much as possible, then I tried to make new methods for promoting of Number Type into MultiDual, by defining method for promote_rule() and convert(). I got so many errors and I finally got them resolved by trying some changes in code. 
