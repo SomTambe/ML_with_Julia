@@ -1,5 +1,6 @@
 # ML with Julia
-Instructions on how to submit your assignments:
-1. Create a folder with in this format - **190847_Som_Tambe**
-2. Enter your assignment solutions in a Markdown file in this format in your respective folder - **Ass_1.md**. If you have multiple markdown files (please avoid) for a single assignment, make a folder bearing the same name and put your files in it.
-3. Make a Pull Request in this repo.
+Assignment 1: Solved several Programming Problems Using Julia Programming Language 
+
+Assignment 2: Applied Auto Differentiation using Dual Numbers in Julia using promote and base rules
+
+Assignment 3: Implemented Linear Regression using Plots and Zygote Library 
